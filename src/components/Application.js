@@ -18,15 +18,19 @@ export default function Application(props) {
   //     day,
   //   });
   // };
+
+  //const dailyAppointments = [];
   const setDay = (day) => setState({ ...state, day });
   useEffect(() => {
     const baseURL = "http://localhost:8001";
     Promise.all([
       axios.get(`${baseURL}/api/days`),
       axios.get(`${baseURL}/api/appointments`),
+      //axios.get(`${baseURL}/api/interviewers`),
     ]).then((results) => {
       const days = results[0].data;
       const appointments = results[1].data;
+      //const interviewer = results[2].data;
       //setState((prev) => ({ ...prev, days }));
       setState({
         ...state,
