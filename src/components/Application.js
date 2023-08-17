@@ -3,58 +3,44 @@ import DayList from "./DayList";
 import "components/Application.scss";
 import Appointment from "./Appointment";
 import axios from "axios";
-
-const appointments = {
-  1: {
-    id: 1,
-    time: "12pm",
-  },
-  2: {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 3,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      },
-    },
-  },
-  3: {
-    id: 3,
-    time: "2pm",
-  },
-  4: {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Archie Andrews",
-      interviewer: {
-        id: 4,
-        name: "Cohana Roy",
-        avatar: "https://i.imgur.com/FK8V841.jpg",
-      },
-    },
-  },
-  5: {
-    id: 5,
-    time: "4pm",
-  },
-};
+import { getAppointmentsForDay } from "helpers/selectors";
 
 export default function Application(props) {
-  const [days, setDays] = useState([]);
-  const daysUrl = "http://localhost:8001/api/days";
+  const [state, setState] = useState({
+    day: "Monday",
+    days: [],
+    // you may put the line below, but will have to remove/comment hardcoded appointments variable
+    appointments: {},
+  });
+  // const setDay = (day) => {
+  //   return setState({
+  //     ...state,
+  //     day,
+  //   });
+  // };
+  const setDay = (day) => setState({ ...state, day });
   useEffect(() => {
-    axios.get(daysUrl).then((res) => {
-      setDays([...res.data]);
+    const baseURL = "http://localhost:8001";
+    Promise.all([
+      axios.get(`${baseURL}/api/days`),
+      axios.get(`${baseURL}/api/appointments`),
+    ]).then((results) => {
+      const days = results[0].data;
+      const appointments = results[1].data;
+      //setState((prev) => ({ ...prev, days }));
+      setState({
+        ...state,
+        days,
+        appointments,
+      });
     });
   }, []);
-  const appointment = Object.values(appointments).map((appointment) => {
-    return <Appointment key={appointment.id} {...appointment} />;
-  });
 
+  const appointment = getAppointmentsForDay(state, state.day).map(
+    (appointment) => {
+      return <Appointment key={appointment.id} {...appointment} />;
+    }
+  );
   return (
     <main className="layout">
       <section className="sidebar">
@@ -65,7 +51,7 @@ export default function Application(props) {
         />
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
-          <DayList days={days} value={days} onChange={setDays} />
+          <DayList days={state.days} value={state.days} onChange={setDay} />
         </nav>
         <img
           className="sidebar__lhl sidebar--centered"
