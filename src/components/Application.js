@@ -13,14 +13,7 @@ export default function Application(props) {
     appointments: {},
     interviewer: {},
   });
-  // const setDay = (day) => {
-  //   return setState({
-  //     ...state,
-  //     day,
-  //   });
-  // };
 
-  //const dailyAppointments = [];
   const setDay = (day) => setState({ ...state, day });
   useEffect(() => {
     const baseURL = "http://localhost:8001";
@@ -31,27 +24,31 @@ export default function Application(props) {
     ]).then((results) => {
       const days = results[0].data;
       const appointments = results[1].data;
-      const interviewer = results[2].data;
+      const interviewers = results[2].data;
       //console.log(interviewer);
       //setState((prev) => ({ ...prev, days }));
       setState({
         ...state,
         days,
         appointments,
-        interviewer,
+        interviewers,
       });
     });
   }, []);
 
-  const appointment = getAppointmentsForDay(state, state.day).map(
+  const appointments = getAppointmentsForDay(state, state.day).map(
     (appointment) => {
-      console.log(appointment);
+      // console.log("day", state.day);
+      // console.log("appoinmeent", appointment);
+      // console.log("xtate", state);
+      //console.log("interviwers", state.interviewers);
       const interview = getInterview(state, appointment.interview);
       return (
         <Appointment
           key={appointment.id}
-          interview={interview}
-          {...appointment}
+          id={appointment.id}
+          interview={getInterview(state, appointment.interview)}
+          //interviewers={interviewers}
         />
       );
     }
@@ -75,7 +72,7 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {appointment}
+        {appointments}
         <Appointment key="last" time="5pm" />
       </section>
     </main>
