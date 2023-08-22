@@ -19,3 +19,15 @@ export function getInterview(state, interview) {
     interviewer: state.interviewers[interview.interviewer],
   };
 }
+export function getInterviewersForDay(state, day) {
+  let interviewersArr = [];
+
+  state.days.map((dayObject) => {
+    if (dayObject.name === day) {
+      dayObject.interviewers.forEach((interviewerId) =>
+        interviewersArr.push(interviewerId)
+      );
+    }
+  });
+  return interviewersArr.map((id) => state.interviewers[id]);
+}
