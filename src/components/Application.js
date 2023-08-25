@@ -30,8 +30,6 @@ export default function Application(props) {
       const days = results[0].data;
       const appointments = results[1].data;
       const interviewers = results[2].data;
-      //console.log(interviewer);
-      //setState((prev) => ({ ...prev, days }));
       setState({
         ...state,
         days,
@@ -49,22 +47,19 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment,
     };
-    // setState({
-    //   ...state,
-    //   appointments,
-    // });
     return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
-      // const appointments = {
-      //   ...state.appointments,
-      //   [id]: appointment,
-      // };
-      //      const days = writeSpotsToDays(appointments, id);
-      // setState((prev) => {
-      //   let newState = { ...prev };
-      //   newState.appointments = appointments;
-      //   // newState.days = days;
-      //   return newState;
-      // });
+      setState({
+        ...state,
+        appointments,
+      });
+    });
+  }
+  function cancelInterview(id) {
+    const appointments = {
+      ...state.appointments,
+    };
+    return axios.delete(`/api/appointments/${id}`).then(() => {
+      appointments[id].interview = null;
       setState({
         ...state,
         appointments,
@@ -75,10 +70,7 @@ export default function Application(props) {
 
   const appointments = getAppointmentsForDay(state, state.day).map(
     (appointment) => {
-      //console.log("appoinment", appointment);
       const interview = getInterview(state, appointment.interview);
-
-      //console.log("appoinment.interview", appointment.interview);
       return (
         <Appointment
           key={appointment.id}
@@ -86,6 +78,7 @@ export default function Application(props) {
           interview={interview}
           interviewers={interviewers}
           bookInterview={bookInterview}
+          cancelInterview={cancelInterview}
         />
       );
     }
