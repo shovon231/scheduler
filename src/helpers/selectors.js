@@ -20,13 +20,17 @@ export function getInterview(state, interview) {
 }
 export function getInterviewersForDay(state, day) {
   let interviewersArr = [];
+  const dayObject = state.days.find((d) => d.name === day);
 
-  state.days.map((dayObject) => {
-    if (dayObject.name === day) {
-      dayObject.interviewers.forEach((interviewerId) =>
-        interviewersArr.push(interviewerId)
-      );
-    }
-  });
+  // //console.log(dayObject);
+  // return;
+  // state.days.map((dayObject) => {
+  //   if (dayObject.name === day) {
+  dayObject &&
+    dayObject.interviewers.forEach((interviewerId) =>
+      interviewersArr.push(interviewerId)
+    );
+  //   }
+  // });
   return interviewersArr.map((id) => state.interviewers[id]);
 }
