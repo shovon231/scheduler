@@ -1,72 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import DayList from "./DayList";
 import "components/Application.scss";
 import Appointment from "./Appointment";
-import axios from "axios";
 import {
   getAppointmentsForDay,
   getInterview,
   getInterviewersForDay,
 } from "helpers/selectors";
-
+import useApplicationData from "hooks/useApplicationData";
 export default function Application(props) {
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    // you may put the line below, but will have to remove/comment hardcoded appointments variable
-    appointments: {},
-    interviewers: {},
-  });
-
-  const setDay = (day) => setState({ ...state, day });
-
-  useEffect(() => {
-    const baseURL = "http://localhost:8001";
-    Promise.all([
-      axios.get(`${baseURL}/api/days`),
-      axios.get(`${baseURL}/api/appointments`),
-      axios.get(`${baseURL}/api/interviewers`),
-    ]).then((results) => {
-      const days = results[0].data;
-      const appointments = results[1].data;
-      const interviewers = results[2].data;
-      setState({
-        ...state,
-        days,
-        appointments,
-        interviewers,
-      });
-    });
-    // eslint-disable-next-line
-  }, []);
-  function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview },
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
-      setState({
-        ...state,
-        appointments,
-      });
-    });
-  }
-  function cancelInterview(id) {
-    const appointments = {
-      ...state.appointments,
-    };
-    return axios.delete(`/api/appointments/${id}`).then(() => {
-      appointments[id].interview = null;
-      setState({
-        ...state,
-        appointments,
-      });
-    });
-  }
+  const { state, setDay, bookInterview, cancelInterview } =
+    useApplicationData();
   const interviewers = getInterviewersForDay(state, state.day);
 
   const appointments = getAppointmentsForDay(state, state.day).map(
