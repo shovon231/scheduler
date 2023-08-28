@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function useApplicationData() {
@@ -28,8 +28,10 @@ export default function useApplicationData() {
         interviewers,
       });
     });
+
     // eslint-disable-next-line
   }, []);
+
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -40,9 +42,12 @@ export default function useApplicationData() {
       [id]: appointment,
     };
     return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
+      const days = updateSpots(appointments, id);
+      //console.log("book interview days", days);
       setState({
         ...state,
         appointments,
+        days,
       });
     });
   }
@@ -50,13 +55,42 @@ export default function useApplicationData() {
     const appointments = {
       ...state.appointments,
     };
+
     return axios.delete(`/api/appointments/${id}`).then(() => {
       appointments[id].interview = null;
+      const days = updateSpots(appointments, id);
+      //console.log("delete", days);
       setState({
         ...state,
         appointments,
+        days,
       });
     });
   }
+  function updateSpots(appointments, id) {
+    const days = [...state.days];
+    let slots;
+    let freeSpots = 0;
+    let dayIndex;
+
+    for (let i = 0; i < days.length; i++) {
+      if (days[i].appointments.includes(id)) {
+        slots = [...days[i].appointments];
+        dayIndex = i;
+        break;
+      }
+    }
+    for (const slot of slots) {
+      if (appointments[slot].interview === null) {
+        freeSpots++;
+      }
+    }
+
+    // set free slots in day
+    days[dayIndex].spots = freeSpots;
+
+    return days;
+  }
+
   return { state, setDay, bookInterview, cancelInterview };
 }
