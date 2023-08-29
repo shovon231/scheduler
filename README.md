@@ -84,3 +84,11 @@ Please note that the application automatically updates the number of free spots 
 - react 16.9.0 or above
 - react-dom 16.9.0 or above
 - react-scripts 3.4.4. or above
+
+## contributing
+
+Contributions are welcome! If you find a bug or want to add a new feature, feel free to open an issue or submit a pull request.
+
+## license
+
+This project is licensed under the MIT License
