@@ -1,36 +1,35 @@
 import React, { useState } from "react";
-
 import Button from "components/Button";
 import InterviewerList from "components/InterviewerList";
 
 export default function Form(props) {
+  // State variables for student name, error message, and selected interviewer
   const [student, setStudent] = useState(props.student || "");
   const [error, setError] = useState("");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-
+  // Function to validate form input and trigger onSave if valid
   function validate() {
     if (student === "") {
       setError("Student name cannot be blank");
       return;
     }
-
     if (interviewer === null) {
       setError("Please select an interviewer");
       return;
     }
-
-    setError("");
-    props.onSave(student, interviewer);
+    setError(""); // Clear any previous error messages
+    props.onSave(student, interviewer); // Call onSave with valid input
   }
+  // Reset the form inputs
   const reset = () => {
     setStudent("");
     setInterviewer(null);
   };
+  // Cancel button handler
   const cancel = () => {
     reset();
     props.onCancel();
   };
-  //console.log("form", interviewer);
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
@@ -42,7 +41,7 @@ export default function Form(props) {
             placeholder="Enter Student Name"
             value={student}
             onChange={(e) => {
-              setStudent(e.target.value);
+              setStudent(e.target.value); // Update student state on input change
             }}
           />
         </form>
@@ -50,14 +49,16 @@ export default function Form(props) {
         <InterviewerList
           interviewers={props.interviewers}
           value={interviewer}
-          onChange={setInterviewer}
+          onChange={setInterviewer} // Update interviewer state on selection change
         />
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
+          {/* Cancel button */}
           <Button danger onClick={cancel}>
             Cancel
           </Button>
+          {/* Save button */}
           <Button confirm onClick={validate}>
             Save
           </Button>

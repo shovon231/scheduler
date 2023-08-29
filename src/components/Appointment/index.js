@@ -11,6 +11,7 @@ import Confirm from "./Confirm";
 import Error from "./Error";
 
 export default function Appointment(props) {
+  // Define different modes for the appointment component
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -21,9 +22,12 @@ export default function Appointment(props) {
   const ERROR_SAVE = "ERROR_SAVE";
   const ERROR_DELETE = "ERROR_DELETE";
 
+  // Use the custom hook useVisualMode to manage component modes
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
+
+  // Function to save an interview
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -36,7 +40,8 @@ export default function Appointment(props) {
       .catch((error) => transition(ERROR_SAVE, true));
   }
 
-  function onDelete(id) {
+  // Function to delete an interview
+  function onDelete() {
     transition(DELETING, true);
     props
       .cancelInterview(props.id)
@@ -46,12 +51,14 @@ export default function Appointment(props) {
 
   return (
     <article className="appointment">
+      {/* Display the appointment header */}
       <Header time={props.time} />
+
+      {/* Render different components based on the current mode */}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === CREATE && (
         <Form interviewers={props.interviewers} onCancel={back} onSave={save} />
       )}
-
       {mode === SHOW && (
         <Show
           student={props.interview.student}
