@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from "react";
 import InterviewerListItem from "./InterviewerListItem";
 import "components/InterviewerList.scss";
@@ -5,7 +6,8 @@ import "components/InterviewerList.scss";
 // InterviewerList component that displays a list of InterviewerListItem components
 export default function InterviewerList(props) {
   // Map through the provided interviewers data to create InterviewerListItem components
-  const interviewers = props.interviewers.map((interviewer) => {
+  let interviewersProps = props.interviewers;
+  const interviewers = interviewersProps.map((interviewer) => {
     return (
       <InterviewerListItem
         key={interviewer.id} // Use the interviewer's id as the key
@@ -28,3 +30,6 @@ export default function InterviewerList(props) {
     </section>
   );
 }
+InterviewerList.propTypes = {
+  interviewers: PropTypes.array.isRequired,
+};
