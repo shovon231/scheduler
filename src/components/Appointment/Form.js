@@ -23,6 +23,7 @@ export default function Form(props) {
   // Reset the form inputs
   const reset = () => {
     setStudent("");
+    setError("");
     setInterviewer(null);
   };
   // Cancel button handler
