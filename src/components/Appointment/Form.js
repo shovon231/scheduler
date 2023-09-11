@@ -43,6 +43,7 @@ export default function Form(props) {
             onChange={(e) => {
               setStudent(e.target.value); // Update student state on input change
             }}
+            data-testid="student-name-input"
           />
         </form>
         <section className="appointment__validation">{error}</section>
