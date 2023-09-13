@@ -18,9 +18,9 @@ export default function useApplicationData() {
 
     // Fetch data from multiple API endpoints in parallel using Promise.all
     Promise.all([
-      axios.get(`${baseURL}/api/days`),
-      axios.get(`${baseURL}/api/appointments`),
-      axios.get(`${baseURL}/api/interviewers`),
+      axios.get(`/api/days`),
+      axios.get(`/api/appointments`),
+      axios.get(`/api/interviewers`),
     ]).then((results) => {
       const days = results[0].data;
       const appointments = results[1].data;

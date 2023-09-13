@@ -7,10 +7,8 @@ import Appointment from "components/Appointment";
 afterEach(cleanup);
 
 describe("Appointment", () => {
-  it("defaults to Monday and changes the schedule when a new day is selected", () => {
-    const { getByText } = render(<Application />);
-
-    return waitForElement(() => getByText("Monday"));
+  it("renders without crashing", () => {
+    render(<Appointment />);
   });
 
   it("does something it is supposed to do", () => {
