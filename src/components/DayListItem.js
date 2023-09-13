@@ -33,6 +33,7 @@ export default function DayListItem(props) {
       onClick={() => {
         props.setDay(props.name); // Trigger the setDay function on click
       }}
+      data-testid="day"
     >
       {/* Display the day of the week */}
       <h2 className="text--regular">{props.name}</h2>

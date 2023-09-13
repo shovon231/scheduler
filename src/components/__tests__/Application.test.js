@@ -10,6 +10,7 @@ import {
   getAllByTestId,
   getByAltText,
   getByPlaceholderText,
+  queryByText,
 } from "@testing-library/react";
 
 import Application from "components/Application";
@@ -60,7 +61,14 @@ describe("Application", () => {
 
     // Simulate clicking the "Save" button
     fireEvent.click(getByText(appointment, "Save"));
+    // Wait for Saving to finish
+    await waitForElement(() => getByText(appointment, "Lydia Miller-Jones"));
 
-    console.log(prettyDOM(appointment));
+    // Find the day element for "Monday"
+    const day = getAllByTestId(container, "day").find((day) =>
+      queryByText(day, "Monday")
+    );
+    // Check if the text "no spots remaining" is present for the selected day
+    expect(getByText(day, /no spots remaining/i)).toBeInTheDocument();
   });
 });
