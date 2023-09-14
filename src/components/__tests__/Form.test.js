@@ -92,7 +92,7 @@ describe("Form", () => {
     expect(onSave).toHaveBeenCalledWith("Lydia Miller-Jones", 1);
   });
 
-  xit("calls onSave function when the name is defined", () => {});
+  it("calls onSave function when the name is defined", () => {});
 
   it("calls onCancel and resets the input field", () => {
     const onCancel = jest.fn();
